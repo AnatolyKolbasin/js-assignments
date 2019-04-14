@@ -30,7 +30,16 @@
  *
  */
 function getFizzBuzz(num) {
-    throw new Error('Not implemented');
+    if(num % 15 === 0) {
+        return 'FizzBuzz';
+    }
+    if(num % 5 === 0) {
+      return 'Buzz';
+    }
+    if(num % 3 === 0) {
+      return 'Fizz';
+    }
+    return num;
 }
 
 
@@ -46,7 +55,12 @@ function getFizzBuzz(num) {
  *   10 => 3628800
  */
 function getFactorial(n) {
-    throw new Error('Not implemented');
+    let factorial = 1;
+    while(n > 0) {
+        factorial *= n;
+        n--;
+    }
+    return factorial;
 }
 
 
@@ -63,7 +77,12 @@ function getFactorial(n) {
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
 function getSumBetweenNumbers(n1, n2) {
-    throw new Error('Not implemented');
+    let sum = 0;
+    while(n1 <= n2) {
+      sum += n1;
+      n1++;
+    }
+    return sum;
 }
 
 
@@ -82,7 +101,7 @@ function getSumBetweenNumbers(n1, n2) {
  *   10,10,10 =>  true
  */
 function isTriangle(a,b,c) {
-    throw new Error('Not implemented');
+    return (a < (b + c) && b < (a + c) && c < (a + b))? true : false;
 }
 
 
@@ -192,7 +211,13 @@ function findFirstSingleChar(str) {
  *
  */
 function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
-    throw new Error('Not implemented');
+    let result = isStartIncluded? '[' : '(';
+    if(a < b) {
+      result += `${a}, ${b}`;
+    } else {
+      result += `${b}, ${a}`;
+    }
+    return isEndIncluded? result + ']' : result + ')';
 }
 
 
@@ -209,7 +234,7 @@ function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
  * 'noon' => 'noon'
  */
 function reverseString(str) {
-    throw new Error('Not implemented');
+    return str.split('').reverse().join('');
 }
 
 
@@ -226,7 +251,8 @@ function reverseString(str) {
  *   34143 => 34143
  */
 function reverseInteger(num) {
-    throw new Error('Not implemented');
+    num = '' + num;
+    return +num.split('').reverse().join('');
 }
 
 
@@ -251,7 +277,13 @@ function reverseInteger(num) {
  *   4916123456789012 => false
  */
 function isCreditCardNumber(ccn) {
-    throw new Error('Not implemented');
+    ccn = '' + ccn;
+    return ccn.split('')
+        .reverse()
+        .map( (x) => parseInt(x) )
+        .map( (x,idx) => idx % 2 ? x * 2 : x )
+        .map( (x) => x > 9 ? (x % 10) + 1 : x )
+        .reduce( (accum, x) => accum += x ) % 10 === 0;
 }
 
 
@@ -270,9 +302,15 @@ function isCreditCardNumber(ccn) {
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
 function getDigitalRoot(num) {
-    throw new Error('Not implemented');
+    let root = num;
+    while(num > 10) {
+      let temp = num + '';
+      temp = temp.split('');
+      root = temp.reduce((a, b) => +a + (+b));
+      num = root;
+    }
+    return root;
 }
-
 
 /**
  * Returns true if the specified string has the balanced brackets and false otherwise.
@@ -296,7 +334,20 @@ function getDigitalRoot(num) {
  *   '{[(<{[]}>)]}' = true 
  */
 function isBracketsBalanced(str) {
-    throw new Error('Not implemented');
+    //TODO
+    str =  str.split('');
+    let leftBracketCommon = str.filter((x) => x == '(').length;
+    let rightBracketCommon = str.filter((x) => x == ')').length;
+    let leftBracketCurly = str.filter((x) => x == '{').length;
+    let rightBracketCurly = str.filter((x) => x == '}').length;
+    let leftBracketStraight = str.filter((x) => x == '[').length;
+    let rightBracketStraight = str.filter((x) => x == ']').length;
+    if(leftBracketCommon === rightBracketCommon
+      && leftBracketCurly === rightBracketCurly
+      && leftBracketStraight === rightBracketStraight) { 
+        return true;
+      }
+    return false;
 }
 
 
@@ -332,7 +383,34 @@ function isBracketsBalanced(str) {
  *
  */
 function timespanToHumanString(startDate, endDate) {
-    throw new Error('Not implemented');
+  const altRound = (val) => Math.abs(Math.round(val) - val) == 0.5 ? Math.floor(val) : Math.round(val);
+  
+  let diff_in_seconds = (endDate.getUTCFullYear() - startDate.getUTCFullYear())*365*24*60*60 + (endDate.getUTCMonth() - startDate.getUTCMonth())*30*24*60*60 + (endDate.getUTCDay() - startDate.getUTCDay())*24*60*60 + (endDate.getUTCHours() - startDate.getUTCHours())*60 + (endDate.getUTCMinutes() - startDate.getUTCMinutes())*60 + (endDate.getUTCSeconds() - startDate.getUTCSeconds()) + (endDate.getUTCMilliseconds() - startDate.getUTCMilliseconds())/1000;
+  if(diff_in_seconds > 546*24*60*60) {
+    return '2 years ago ... 20 years ago';
+  } else if(diff_in_seconds > 345*24*60*60) {
+    return 'a year ago';
+  } else if(diff_in_seconds > 45*24*60*60) {
+    return '2 months ago ... 11 months ago';
+  } else if(diff_in_seconds > 25*25*60*60) {
+    return 'a month ago';
+  }
+  if(diff_in_seconds > 2160*60) {
+    return altRound(diff_in_seconds/(3600*24)) + ' days ago';
+  } else if(diff_in_seconds > 1320*60) {
+    return 'a day ago';
+  } else if(diff_in_seconds > 90*60) {
+    return altRound(diff_in_seconds/(3600)) + ' hours ago';
+  } else if(diff_in_seconds > 45*60) {
+    return 'an hour ago';
+  }
+  if(diff_in_seconds > 90) {
+    return altRound(diff_in_seconds/60) + ' minutes ago';
+  } else if(diff_in_seconds > 45) {
+    return 'a minute ago';
+  } else {
+    return 'a few seconds ago';
+  }
 }
 
 
@@ -356,7 +434,7 @@ function timespanToHumanString(startDate, endDate) {
  *    365, 10 => '365'
  */
 function toNaryString(num, n) {
-    throw new Error('Not implemented');
+  return num.toString(n);
 }
 
 
@@ -431,7 +509,39 @@ function getMatrixProduct(m1, m2) {
  *
  */
 function evaluateTicTacToePosition(position) {
-    throw new Error('Not implemented');
+  function check(sym){
+    for(let i =0; i < 3; i++) {
+      if(position[i][0] === sym && 
+        position[i][1] === sym &&  
+        position[i][2] === sym) {
+                  return true;
+        }
+      if(position[0][i] === sym &&
+        position[1][i] === sym && 
+        position[2][i] === sym) {
+                  return true;
+        }
+    }
+    if(position[0][0] === sym &&
+      position[1][1] === sym && 
+      position[2][2] === sym) {
+                return true;
+      }
+    if (position[0][2] === sym && 
+        position[1][1] === sym && 
+        position[2][0] === sym) {
+         return true;
+      }
+    return false;
+  }
+  
+  if(check('X') === true) {
+    return 'X';
+  } else if(check('0') === true) {
+    return '0';
+  } else {
+    return undefined;
+  }
 }
 
 
