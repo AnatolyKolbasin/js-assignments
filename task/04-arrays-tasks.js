@@ -555,7 +555,19 @@ function distinct(arr) {
  *   }
  */
 function group(array, keySelector, valueSelector) {
-   //TODO
+   let keys = array.map(keySelector);
+   let values = array.map(valueSelector);
+   let map = new Map();
+   keys.filter((x, i) => {
+      if (!map.has(x)) {
+          map.set(x, [values[i]]);
+      } else {
+          let value = map.get(x);
+          value.push(values[i]);
+          map.set(x, value);
+      }
+   });
+   return map;
 }
 
 
