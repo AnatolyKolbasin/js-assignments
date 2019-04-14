@@ -334,20 +334,19 @@ function getDigitalRoot(num) {
  *   '{[(<{[]}>)]}' = true 
  */
 function isBracketsBalanced(str) {
-    //TODO
-    str =  str.split('');
-    let leftBracketCommon = str.filter((x) => x == '(').length;
-    let rightBracketCommon = str.filter((x) => x == ')').length;
-    let leftBracketCurly = str.filter((x) => x == '{').length;
-    let rightBracketCurly = str.filter((x) => x == '}').length;
-    let leftBracketStraight = str.filter((x) => x == '[').length;
-    let rightBracketStraight = str.filter((x) => x == ']').length;
-    if(leftBracketCommon === rightBracketCommon
-      && leftBracketCurly === rightBracketCurly
-      && leftBracketStraight === rightBracketStraight) { 
-        return true;
-      }
-    return false;
+  let stack = [];
+  let openBrackets = ['(', '{', '[', '<'];
+  let closeBrackets = [')', '}', ']', '>'];
+  str = str.split('');
+  for(let i = 0; i < str.length; i++) {
+    if(openBrackets.indexOf(str[i]) !== -1) {
+      stack.push(str[i]);
+    } else if(stack.pop() != openBrackets[closeBrackets.indexOf(str[i])] &&
+              closeBrackets.indexOf(str[i]) > -1){
+                return false;
+    }
+  }
+  return stack.length === 0;
 }
 
 
@@ -474,21 +473,7 @@ function getCommonDirectoryPath(pathes) {
  *
  */
 function getMatrixProduct(m1, m2) {
-  let result = [];
-  for (let i = 0; i < m1.length; i++) {
-      result[i] = new Array(m2.length);
-      for (let j = 0; j < m2[0].length; j++) {
-          let sum = 0;
-          for (let k = 0; k < m1.length; k++) {
-              sum += m1[i][k] * m2[k][j];
-          }
-          result[i][j] = sum;
-      }
-  }
-  if(m2[0].length) {
-    return sum;
-  }
-  return result; 
+  throw new Error('Not implemented');
 }
 
 
